@@ -1,5 +1,5 @@
 include("VetoGame.jl")
-using .VetoGame: VetoGameResult, solve_veto_game
+using .VetoGame: solve_veto_game
 
 function main()
     # Each column represents the preferences of a player in descending order
