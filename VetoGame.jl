@@ -1,6 +1,6 @@
 module VetoGame
     # EXPORTS AND IMPORTS
-    export solve_veto_game
+    export solve_veto_game, solve_veto_game_letters
     using Combinatorics: combinations
     using DataStructures: Queue, dequeue!, enqueue!
     
@@ -66,6 +66,27 @@ module VetoGame
         end
         
         return solution
+    end
+    
+    # FUNCTION: `solve_veto_game_letters`
+    # function solve_veto_game_letters(preferences::Matrix{Char}, hash::Dict{Char, Int64})
+    #     hash_rev = Dict(values(hash) .=> keys(hash))
+        
+    #     for (i, k) in enumerate(solve_veto_game([hash[k] for k in preferences]))
+    #         println("Player $i vetoes $(hash_rev[k])")
+    #     end
+    # end
+    function solve_veto_game_letters(preferences::Matrix)
+        options = unique(preferences)
+        hash = Dict(option => i for (i, option) in enumerate(options))
+        hash_rev = Dict(values(hash) .=> keys(hash))
+        solution = solve_veto_game([hash[k] for k in preferences])
+        
+        for (i, k) in enumerate(solution)
+            println("Player $i vetoes $(hash_rev[k])")
+        end
+        
+        println("\nEnd result: $(setdiff(options, solution)[1])")
     end
     
     # FUNCTION: `set_outcome!`
