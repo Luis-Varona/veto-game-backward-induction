@@ -1,5 +1,5 @@
 include("VetoGame.jl")
-using .VetoGame: solve_veto_game_letters
+using .VetoGame: VetoGameResult, solve_veto_game
 
 function main()
     # Each column represents the preferences of a player in descending order
@@ -8,7 +8,8 @@ function main()
                    'C'  'D'  'A';
                    'D'  'C'  'D']
     
-    solution = solve_veto_game_letters(preferences)
+    result = solve_veto_game(preferences)
+    println(result.to_string)
 end
 
 main()

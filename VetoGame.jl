@@ -1,20 +1,47 @@
 module VetoGame
     # EXPORTS AND IMPORTS
-    export solve_veto_game, solve_veto_game_letters
+    export VetoGameResult, solve_veto_game
     using Combinatorics: combinations
     using DataStructures: Queue, dequeue!, enqueue!
     
-    # MUTABLE STRUCT: `StateNode`
-    mutable struct StateNode
-        state::Vector{Int64}
-        parent::Union{Nothing, StateNode}
-        children::Vector{StateNode}
-        outcome::Int64
+    # STRUCT: `VetoGameResult`
+    struct VetoGameResult{T}
+        solution::Vector{T}
+        outcome::T
+    end
+    
+    function Base.getproperty(result::VetoGameResult, prop::Symbol)
+        if prop in fieldnames(VetoGameResult)
+            out = getfield(result, prop)
+        elseif prop == :to_string
+            rounds = Vector{String}(undef, length(result.solution) + 1)
+            rounds[1:(end - 1)] .= [
+                "Player $i vetoes $option\n" for (i, option) in enumerate(result.solution)
+            ]
+            rounds[end] = "\nOutcome: $(result.outcome)"
+            out = join(rounds)
+        else
+            throw(ArgumentError("type VetoGameResult has no field $prop"))
+        end
+        
+        return out
+    end
+    
+    function Base.propertynames(::VetoGameResult)
+        return (:solution, :outcome, :to_string)
+    end
+    
+    # MUTABLE STRUCT: `VetoGameState`
+    mutable struct VetoGameState{T}
+        state::Vector{T}
+        parent::Union{Nothing, VetoGameState{T}}
+        children::Vector{VetoGameState{T}}
+        outcome::Union{Missing, T}
         depth::Int64
     end
     
     # FUNCTION: `solve_veto_game`
-    function solve_veto_game(preferences::Matrix{Int64})
+    function solve_veto_game(preferences::Matrix{T}) where T
         (m, n) = size(preferences)
         
         if m != n + 1
@@ -23,8 +50,8 @@ module VetoGame
             ))
         end
         
-        root = StateNode(1:m, nothing, StateNode[], 0, 0)
-        Q = Queue{StateNode}()
+        root = VetoGameState{T}(unique(preferences), nothing, VetoGameState{T}[], missing, 0)
+        Q = Queue{VetoGameState{T}}()
         enqueue!(Q, root)
         
         while first(Q).depth < n
@@ -32,7 +59,7 @@ module VetoGame
             depth = node.depth
             
             for comb in combinations(node.state, m - depth - 1)
-                child = StateNode(comb, node, StateNode[], 0, depth + 1)
+                child = VetoGameState{T}(comb, node, VetoGameState{T}[], missing, depth + 1)
                 push!(node.children, child)
                 enqueue!(Q, child)
             end
@@ -56,7 +83,7 @@ module VetoGame
         end
         
         set_outcome!(root, preferences)
-        solution = Vector{Int64}(undef, n)
+        solution = Vector{T}(undef, n)
         node = root
         
         while node.depth < n
@@ -65,25 +92,11 @@ module VetoGame
             node = child
         end
         
-        return solution
-    end
-    
-    # FUNCTION: `solve_veto_game_letters`
-    function solve_veto_game_letters(preferences::Matrix)
-        options = unique(preferences)
-        hash = Dict(option => i for (i, option) in enumerate(options))
-        hash_rev = Dict(values(hash) .=> keys(hash))
-        solution = solve_veto_game([hash[k] for k in preferences])
-        
-        for (i, k) in enumerate(solution)
-            println("Player $i vetoes $(hash_rev[k])")
-        end
-        
-        println("\nEnd result: $(setdiff(options, solution)[1])")
+        return VetoGameResult{T}(solution, node.outcome)
     end
     
     # FUNCTION: `set_outcome!`
-    function set_outcome!(node::StateNode, preferences::Matrix{Int64})
+    function set_outcome!(node::VetoGameState{T}, preferences::Matrix{T}) where T
         player_prefs = @view preferences[:, node.depth + 1]
         sort!(node.children, by = x -> findfirst(player_prefs .== x.outcome))
         
