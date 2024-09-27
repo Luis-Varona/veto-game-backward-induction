@@ -69,13 +69,6 @@ module VetoGame
     end
     
     # FUNCTION: `solve_veto_game_letters`
-    # function solve_veto_game_letters(preferences::Matrix{Char}, hash::Dict{Char, Int64})
-    #     hash_rev = Dict(values(hash) .=> keys(hash))
-        
-    #     for (i, k) in enumerate(solve_veto_game([hash[k] for k in preferences]))
-    #         println("Player $i vetoes $(hash_rev[k])")
-    #     end
-    # end
     function solve_veto_game_letters(preferences::Matrix)
         options = unique(preferences)
         hash = Dict(option => i for (i, option) in enumerate(options))

@@ -1,20 +1,19 @@
 include("VetoGame.jl")
-using .VetoGame: solve_veto_game
+using .VetoGame: solve_veto_game_letters
 
 function main()
     # Each column represents the preferences of a player in descending order
-    preferences = ["A"  "B"  "C";
-                   "B"  "A"  "B";
-                   "C"  "D"  "A";
-                   "D"  "C"  "D"]
+    preferences = ['A'  'B'  'F'  'H'  'C'  'I'  'D'  'E';
+                   'B'  'A'  'B'  'D'  'H'  'F'  'G'  'I';
+                   'C'  'D'  'G'  'E'  'I'  'B'  'C'  'A';
+                   'D'  'H'  'I'  'A'  'A'  'E'  'A'  'D';
+                   'E'  'G'  'C'  'G'  'D'  'C'  'F'  'G';
+                   'F'  'I'  'E'  'C'  'B'  'D'  'H'  'F';
+                   'G'  'F'  'H'  'F'  'G'  'A'  'B'  'H';
+                   'H'  'C'  'A'  'I'  'E'  'H'  'E'  'B';
+                   'I'  'E'  'D'  'B'  'F'  'G'  'I'  'C']
     
-    hash = Dict("A" => 1, "B" => 2, "C" => 3, "D" => 4)
-    preferences = [hash[k] for k in preferences]
-    solution = solve_veto_game(preferences)
-    
-    hash = Dict(v => k for (k, v) in hash)
-    solution = ["Player $i" => hash[k] for (i, k) in enumerate(solution)]
-    println(solution)
+    solve_veto_game_letters(preferences)
 end
 
 main()
