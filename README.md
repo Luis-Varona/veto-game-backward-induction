@@ -1,3 +1,3 @@
 # veto-game-backwards-induction
 
-An algorithm to construct the extensive form of a veto game and perform backward induction to find a solution. (__WORK IN PROGRESS:__ Still need to add further functionality and test cases. Next steps include allowing coalitions between players. Additionally, still need to take into account equally optimal strategies.)
+An algorithm to construct the extensive form of a veto game and perform backward induction to find a solution. The current version can solve an 8-player game in less than 0.5 seconds (and can find equilibria for more players given more time). (__WORK IN PROGRESS:__ Still need to add further functionality and test cases. Next steps include allowing coalitions between players. Additionally, still need to take into account equally optimal strategies.)
