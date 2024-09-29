@@ -1,0 +1,6 @@
+.vscode
+Rust/
+target/
+
+*.o
+*.lock
