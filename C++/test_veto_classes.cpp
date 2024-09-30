@@ -10,22 +10,35 @@ int main() {
     
     char *preferences[3] = {outcomes, outcomes + 1, outcomes + 2};
     
-    char *state_root = new char[3];
-    state_root[0] = 'A';
-    state_root[1] = 'B';
-    state_root[2] = 'C';
+    std::vector<char> state_root;
+    state_root.push_back('A');
+    state_root.push_back('B');
+    state_root.push_back('C');
+    // char *state_root = new char[3];
+    // state_root[0] = 'A';
+    // state_root[1] = 'B';
+    // state_root[2] = 'C';
     
-    char *state_child_1 = new char[2];
-    state_child_1[0] = 'A';
-    state_child_1[1] = 'B';
+    std::vector<char> state_child_1;
+    state_child_1.push_back('A');
+    state_child_1.push_back('B');
+    // char *state_child_1 = new char[2];
+    // state_child_1[0] = 'A';
+    // state_child_1[1] = 'B';
     
-    char *state_child_2 = new char[2];
-    state_child_2[0] = 'A';
-    state_child_2[1] = 'C';
+    std::vector<char> state_child_2;
+    state_child_2.push_back('A');
+    state_child_2.push_back('C');
+    // char *state_child_2 = new char[2];
+    // state_child_2[0] = 'A';
+    // state_child_2[1] = 'C';
     
-    char *state_child_3 = new char[2];
-    state_child_3[0] = 'B';
-    state_child_3[1] = 'C';
+    std::vector<char> state_child_3;
+    state_child_3.push_back('B');
+    state_child_3.push_back('C');
+    // char *state_child_3 = new char[2];
+    // state_child_3[0] = 'B';
+    // state_child_3[1] = 'C';
     
     VetoGameState root(
         state_root,

@@ -38,7 +38,8 @@ class VetoGameResult {
 //
 class VetoGameState {
     public:
-        char *state;
+        // char *state;
+        std::vector<char> state;
         VetoGameState *parent;
         std::vector<VetoGameState> children;
         char *outcome;
@@ -47,7 +48,8 @@ class VetoGameState {
         int n;
         
         VetoGameState(
-            char *state,
+            // char *state,
+            std::vector<char> state,
             VetoGameState *parent,
             std::vector<VetoGameState> children,
             char *outcome,
