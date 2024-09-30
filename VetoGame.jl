@@ -58,7 +58,7 @@ module VetoGame
             node = dequeue!(Q)
             depth = node.depth
             
-            for comb in combinations(node.state, m - depth - 1)
+            for comb in combinations(node.state, n - depth)
                 child = VetoGameState{T}(comb, node, VetoGameState{T}[], missing, depth + 1)
                 push!(node.children, child)
                 enqueue!(Q, child)
