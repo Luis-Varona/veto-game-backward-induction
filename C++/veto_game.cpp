@@ -1,10 +1,12 @@
+#include <cstdio> ///
 #include <cstdlib>
 #include <algorithm>
 #include <queue>
 #include "veto_game.hpp"
 
 VetoGameResult solve_veto_game(char **preferences, int n) {
-    char *options = std::unique(preferences[0], preferences[0] + n);
+    char *options = preferences[0];
+    // char *options = std::unique(preferences[0], preferences[0] + n);
     
     VetoGameState root = VetoGameState(
         options,
@@ -32,7 +34,7 @@ VetoGameResult solve_veto_game(char **preferences, int n) {
             }
             
             for (int j = i; j < n - depth; j++) {
-                state_child[j] = node.state[j + 1];
+                state_child[j] = node.state[j + 1]; /// Error is here?
             }
             
             VetoGameState child = VetoGameState(
@@ -53,15 +55,31 @@ VetoGameResult solve_veto_game(char **preferences, int n) {
         depth = node.depth;
     }
     
+    printf("Meow\n"); ///
+    for (int i = 0; i < n; i++) { ///
+        printf("%c,", node.state[i]); ///
+    } ///
+    printf("\n"); ///
+    for (int i = 0; i < n; i++) { ///
+        printf("%c,", node.parent[0].state[i]); ///
+    } ///
+    printf("\n"); ///
     while (depth == n) {
         Q.pop();
         node.outcome = node.state;
         node.num_children = 1;
         Q.push(*node.parent);
+        // printf("%s\n", node.parent->state); ///
+        // printf("%d\n", node.depth); ///
+        // printf("%d\n", node.parent->depth); ///
+        
         node = Q.front();
         depth = node.depth;
+        // printf("%s\n", node.state); ///
+        // printf("%s\n", Q.back().state); ///
     }
     
+    printf("C\n"); ///
     while (depth > 0) {
         Q.pop();
         VetoGameState *parent = node.parent;
@@ -81,6 +99,7 @@ VetoGameResult solve_veto_game(char **preferences, int n) {
     node = root;
     depth = 0;
     
+    printf("D\n"); ///
     while (depth < n) {
         VetoGameState *child = &node.children[0];
         solution[node.depth] = *std::set_difference(
