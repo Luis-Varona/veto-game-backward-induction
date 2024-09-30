@@ -90,6 +90,7 @@ class VetoGameState {
             children.clear();
             children.push_back(child);
             outcome = child.outcome;
+            num_children = 1;
         }
 };
 
