@@ -1,7 +1,5 @@
 .vscode
 C++/
 Rust/
-target/
 
-*.o
-*.lock
+*.class
