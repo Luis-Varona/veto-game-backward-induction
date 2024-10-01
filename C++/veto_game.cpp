@@ -6,13 +6,13 @@
 #include "veto_game.hpp"
 
 VetoGameResult solve_veto_game(char **preferences, int n) {
-    // char *options = preferences[0];
-    std::vector<char> options;
-    options.assign(preferences[0], preferences[0] + n + 1);
-    for (char c : options) { ///
-        std::cout << c << ','; ///
-    } ///
-    std::cout << std::endl; ///
+    char *options = preferences[0];
+    // std::vector<char> options;
+    // options.assign(preferences[0], preferences[0] + n + 1);
+    // for (char c : options) { ///
+    //     std::cout << c << ','; ///
+    // } ///
+    // std::cout << std::endl; ///
     
     VetoGameState root = VetoGameState(
         options,
@@ -23,10 +23,14 @@ VetoGameResult solve_veto_game(char **preferences, int n) {
         0,
         n
     );
+    for (int i = 0; i < n + 1; i ++) {
+        std::cout << root.state[i] << ','; ///
+    }
+    printf("Meow\n"); ///
     
     std::queue<VetoGameState*> Q;
     Q.push(&root);
-    VetoGameState *node = Q.front();
+    VetoGameState *node = &root;
     int depth = 0;
     
     while (depth < n) {
@@ -37,6 +41,17 @@ VetoGameResult solve_veto_game(char **preferences, int n) {
         // } ///
         
         for (int i = 0; i < n - depth + 1; i++) {
+            // char state_child[n - depth];
+            char *state_child = new char[n - depth];
+            
+            for (int j = 0; j < i; j++) {
+                state_child[j] = node->state[j];
+            }
+            
+            for (int j = i; j < n - depth; j++) {
+                state_child[j] = node->state[j + 1];
+            }
+            
             // std::vector<char> state_child;
             
             // for (int j = 0; j < i; j++) {
@@ -48,8 +63,9 @@ VetoGameResult solve_veto_game(char **preferences, int n) {
             // }
             
             VetoGameState child = VetoGameState(
-                std::vector<char>(),
-                // state_child,
+                // std::vector<char>(),
+                // &state_child[0],
+                state_child,
                 node,
                 std::vector<VetoGameState>(),
                 nullptr,
@@ -58,56 +74,69 @@ VetoGameResult solve_veto_game(char **preferences, int n) {
                 n
             );
             
-            for (int j = 0; j < i; j++) {
-                child.state.push_back(node->state[j]);
-            }
+            // for (int j = 0; j < i; j++) {
+            //     child.state.push_back(node->state[j]);
+            // }
             
-            for (int j = i + 1; j < n - depth + 1; j++) {
-                child.state.push_back(node->state[j]);
-            }
+            // for (int j = i + 1; j < n - depth + 1; j++) {
+            //     child.state.push_back(node->state[j]);
+            // }
             
-            node->children.push_back(child);
+            node->children.push_back(child); /// Not working here?
+            node->num_children++;
+            printf("%ul\n", node->children.size()); /// Error here...
+            printf("%d\n", node->num_children); /// Error here...
             Q.push(&child);
+            // Q.push(&node->children.back());
+            if (child.depth < 4) {
+                for (int i = 0; i < n - depth; i++) {
+                    std::cout << child.state[i] << ','; ///
+                }
+                printf("\n"); ///
+                printf("%d\n", &state_child); ///
+                printf("%d\n", &child); ///
+            }
             // if (child.depth < 4) { ///
-            //     printf("%d | ", child.depth); ///
-            //     printf("%d | ", child.parent->depth); ///
-            //     printf("%d\n", node->depth); ///
+            //     for (char c : child.state) { ///
+            //         std::cout << c << ','; ///
+            //     }
+            //     std::cout << '|'; ///
+            //     for (char c : child.parent->state) { ///
+            //         std::cout << c << ','; ///
+            //     }
+            //     std::cout << '|'; ///
+            //     for (char c : Q.back()->state) { ///
+            //         std::cout << c << ','; ///
+            //     }
+            //     std::cout << std::endl; ///
             // } ///
-            if (child.depth < 4) { ///
-                for (char c : child.state) { ///
-                    std::cout << c << ','; ///
-                }
-                std::cout << '|'; ///
-                for (char c : child.parent->state) { ///
-                    std::cout << c << ','; ///
-                }
-                std::cout << '|'; ///
-                for (char c : Q.back()->state) { ///
-                    std::cout << c << ','; ///
-                }
-                std::cout << std::endl; ///
-            } ///
         }
         
-        for (char c : node->children[8].state) { ///
-            std::cout << c << ','; ///
-        }
-        std::cout << '|'; ///
-        for (char c : Q.front()->state) { ///
-            std::cout << c << ','; ///
-        }
-        std::cout << std::endl; ///
-        printf("%d,|", &Q.front()); ///
-        printf("%d\n", &node->children[8]); ///
+        // for (char c : node->children[8].state) { ///
+        //     std::cout << c << ','; ///
+        // }
+        // std::cout << '|'; ///
+        // for (char c : Q.front()->state) { ///
+        //     std::cout << c << ','; ///
+        // }
+        // std::cout << std::endl; ///
+        // printf("%d,|", &Q.front()); ///
+        // printf("%d\n", &node->children[8]); ///
         
-        std::cout << std::endl; ///
+        // std::cout << std::endl; ///
+        printf("%d\n", node->num_children); ///
         node = Q.front();
         depth = node->depth;
+        printf("%d\n", &node); ///
         printf("%d | ", depth); ///
-        for (char c : node->state) { ///
-            std::cout << c << ','; ///
+        for (int i = 0; i < n - depth; i++) {
+            std::cout << node->state[i] << ','; ///
         }
-        std::cout << std::endl; ///
+        printf("\n"); ///
+        // for (char c : node->state) { ///
+        //     std::cout << c << ','; ///
+        // }
+        // std::cout << std::endl; ///
     }
     
     // for (char c : node.state) { ///
@@ -117,11 +146,29 @@ VetoGameResult solve_veto_game(char **preferences, int n) {
     // for (char c : node.parent->state) { ///
     //     std::cout << c << ','; ///
     // }
+    // VetoGameState m = root.children[0];
+    printf("%d\n", root.children.size()); ///
+    for (int i = 0; i < n; i ++) {
+        std::cout << root.children[0].state[i] << ','; ///
+    }
+    printf("\n"); ///
+    for (int i = 0; i < n; i ++) {
+        std::cout << root.children[1].state[i] << ','; ///
+    }
+    printf("\n"); ///
+    for (int i = 0; i < n; i ++) {
+        std::cout << root.children[8].state[i] << ','; ///
+    }
+    printf("\n"); ///
+    
+    for (int i = 0; i < n; i ++) {
+        std::cout << node->state[i] << ','; ///
+    }
     printf("Meow\n"); ///
     while (depth == n) {
         Q.pop();
-        // node.outcome = node.state;
-        node->outcome = node->state.data();
+        node->outcome = node->state;
+        // node->outcome = node->state.data();
         node->num_children = 1;
         Q.push(node->parent);
         
@@ -162,12 +209,19 @@ VetoGameResult solve_veto_game(char **preferences, int n) {
         VetoGameState *child = &node->children[0];
         
         solution[node->depth] = *std::set_difference(
-            node->state.begin(),
-            node->state.end(),
-            child->state.begin(),
-            child->state.end(),
+            node->state,
+            node->state + n + 1,
+            child->state,
+            child->state + n + 1,
             new char[1]
         );
+        // solution[node->depth] = *std::set_difference(
+        //     node->state.begin(),
+        //     node->state.end(),
+        //     child->state.begin(),
+        //     child->state.end(),
+        //     new char[1]
+        // );
         
         node = child;
         depth = node->depth;

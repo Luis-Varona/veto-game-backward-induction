@@ -38,8 +38,8 @@ class VetoGameResult {
 //
 class VetoGameState {
     public:
-        // char *state;
-        std::vector<char> state;
+        char *state;
+        // std::vector<char> state;
         VetoGameState *parent;
         std::vector<VetoGameState> children;
         char *outcome;
@@ -48,8 +48,8 @@ class VetoGameState {
         int n;
         
         VetoGameState(
-            // char *state,
-            std::vector<char> state,
+            char *state,
+            // std::vector<char> state,
             VetoGameState *parent,
             std::vector<VetoGameState> children,
             char *outcome,
@@ -65,6 +65,11 @@ class VetoGameState {
             this->num_children = num_children;
             this->n = n;
         }
+        
+        // ~VetoGameState() {
+        //     delete[] state;
+        //     // delete[] outcome;
+        // }
         
         void set_outcome(char **preferences) {
             char *player_prefs = preferences[depth];
