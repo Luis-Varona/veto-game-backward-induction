@@ -9,12 +9,7 @@ public class VetoGameState {
     private final ArrayList<VetoGameState> children;
     private char outcome;
     
-    public VetoGameState(
-        String state,
-        char deletion,
-        int depth,
-        VetoGameState parent
-    ) {
+    public VetoGameState(String state, char deletion, int depth, VetoGameState parent) {
         this.state = state;
         this.deletion = deletion;
         this.depth = depth;
@@ -70,9 +65,7 @@ public class VetoGameState {
                 idxChild = i;
             }
             
-            if (rank == 0) {
-                break;
-            }
+            if (rank == 0) break;
         }
         
         VetoGameState child = children.get(idxChild);
