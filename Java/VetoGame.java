@@ -29,14 +29,16 @@ public class VetoGame {
         
         while (nodeQueue.peek().getDepth() < n) {
             VetoGameState node = nodeQueue.remove();
+            String state = node.getState();
+            int stateSize = state.length();
             
-            for (int i = 0; i < node.getState().length() - 1; i++) {
-                String stateChild = node.getState().substring(0, i);
-                stateChild += node.getState().substring(i + 1);
+            for (int i = 0; i < stateSize - 1; i++) {
+                String stateChild = state.substring(0, i);
+                stateChild += state.substring(i + 1);
                 
                 VetoGameState child = new VetoGameState(
                     stateChild,
-                    node.getState().charAt(i),
+                    state.charAt(i),
                     node.getDepth() + 1,
                     node
                 );
@@ -46,8 +48,8 @@ public class VetoGame {
             }
             
             VetoGameState child = new VetoGameState(
-                node.getState().substring(0, node.getState().length() - 1),
-                node.getState().charAt(node.getState().length() - 1),
+                state.substring(0, stateSize - 1),
+                state.charAt(stateSize - 1),
                 node.getDepth() + 1,
                 node
             );
@@ -63,8 +65,8 @@ public class VetoGame {
         }
         
         while (nodeQueue.peek().getDepth() > 0) {
-            VetoGameState parent = nodeQueue.peek().getParent();
             VetoGameState node = nodeQueue.peek();
+            VetoGameState parent = node.getParent();
             
             while (!nodeQueue.isEmpty() && nodeQueue.peek().getParent() == parent) {
                 node = nodeQueue.remove();
